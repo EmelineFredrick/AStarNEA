@@ -55,5 +55,12 @@ class TestHCost(unittest.TestCase):
         self.assertEqual(nameToId.get("Bank"), "13")
         self.assertEqual(nameToId.get("London Bridge"), "157")
 
+    def testForCalculatingTime(self):
+        result = TubeAStar.AStar("13", "7")
+        totalTime = StationGraph.calculateTime(result)
+        self.assertEqual(totalTime, 7)
+        
+        
+
 if __name__ == '__main__':
     unittest.main()

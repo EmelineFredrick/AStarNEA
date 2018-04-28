@@ -77,3 +77,18 @@ def getGraph():
     GRAPH = graph
     return graph
 
+def calculateTime(resultArray):
+    #Array = [station1id, station2id, station3id])
+    totalTime = 0
+    store = []
+    for index, station in enumerate(resultArray):
+        store.append(station)
+        if index == 0:
+            continue
+        for x in GRAPH.get(station):
+            if x[0] == store[index-1]:
+                totalTime += x[2]
+                print(totalTime)
+        
+    print (store)
+    return totalTime
