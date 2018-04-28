@@ -53,7 +53,7 @@ class TestHCost(unittest.TestCase):
     def testForMap(self):
         nameToId = StationGraph.getNameToId()
         self.assertEqual(nameToId.get("Bank"), "13")
-        
+        self.assertEqual(nameToId.get("London Bridge"), "157")
 
 if __name__ == '__main__':
     unittest.main()

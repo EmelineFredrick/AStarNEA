@@ -1,3 +1,4 @@
+#Module: StationGraph.py
 import csv
 
 class Station:
@@ -25,6 +26,15 @@ class Station:
 
 global GRAPH
 GRAPH = {}
+
+def getNameToId():
+    nameToId = {}
+    graph = getGraph()
+    for ID in graph:
+        value = graph.get(ID)
+        name = value[0]
+        nameToId[name] = ID
+    return nameToId
 
 def getGraph():
     global GRAPH
@@ -64,16 +74,6 @@ def getGraph():
         currentStation = stations[stationKey]
         graph[currentStation.GetID()] = currentStation.GetArrayForGraph()
 
-    
     GRAPH = graph
-
     return graph
 
-def getNameToId():
-    nameToId = {}
-    graph = getGraph()
-    for ID in graph:
-        value = graph.get(ID)
-        name = value[0]
-        nameToId[name] = ID
-    return nameToId
