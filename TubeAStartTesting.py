@@ -24,10 +24,26 @@ class TestHCost(unittest.TestCase):
         return
 
     # test to show Dist is longer than HCost for all neighbors
+
+    # test to show we get the right answer for the simples case (Bank to Bank)
+    def testBankToBank(self):
+        result = TubeAStar.AStar("13", "13")
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0], "13")
     
     # test to show we get the right answer for a simple case (Bank to Angel)
+    def testBankToAngel(self):
+        result = TubeAStar.AStar("13", "7")
+        self.assertEqual(len(result), 4)
+        self.assertEqual(result[0], "7")
+        self.assertEqual(result[1], "188")
+        self.assertEqual(result[2], "167")
+        self.assertEqual(result[3], "13")
 
     #test for longer case (Clapham South to Paddington)
+    def testClaphamSouthToPaddington(self):
+        result = TubeAStar.AStar("56", "193")
+        print(result)
 
 if __name__ == '__main__':
     unittest.main()

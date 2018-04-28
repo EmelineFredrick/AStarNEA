@@ -1,5 +1,6 @@
 #Module: TubeAStar.py
 import StationGraph
+import math
 
 # graph format
 # key = station identifier
@@ -21,8 +22,8 @@ def getGraph():
 def AStar (StartKey, EndKey):
     graph = getGraph()
     ClosedSet = set()
-    OpenSet = set(StartKey)
-
+    OpenSet = set()
+    OpenSet.add(StartKey)
     CameFrom = {}
 
     gScore = {}
@@ -40,7 +41,10 @@ def AStar (StartKey, EndKey):
         ClosedSet.add(Current)
 
         stuff = graph.get(Current)
-        Neighbours = stuff[1:]
+        NeighbourEntries = stuff[2:]
+        Neighbours = []
+        for entry in NeighbourEntries:
+            Neighbours.append(entry[0])
 
         for Neighbour in Neighbours:
             if Neighbour in ClosedSet:
@@ -57,20 +61,6 @@ def AStar (StartKey, EndKey):
             fScore[Neighbour] = gScore[Neighbour] + HCost(graph.get(Neighbour), graph.get(EndKey))
 
     return False
-
-#When gScore doesn't have a value for neighbour
-##gTest = {'c': 100}
-##default = "1000000"
-##print(gTest['c'])
-##val = 'd'
-##if val in gTest:
-##    print(gTest[val])
-##else:
-##    print(default)
-##
-##x = set()
-##x.add("hello")
-##print(x)
 
 def Recon (CameFrom, Current):
     TotalPath = [Current]

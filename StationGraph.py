@@ -29,7 +29,7 @@ def getGraph():
     with open("london.stations.csv", "r") as StationFile:
         for row in csv.reader(StationFile):
             if row[0] == "id":
-                print("skipping label line in station file")
+#                print("skipping label line in station file")
                 continue
      
             currentStation = Station(row[0], row[1], row[2], row[3])
@@ -38,7 +38,7 @@ def getGraph():
     with open("london.connections.csv", "r") as ConnectionFile:
         for row in csv.reader(ConnectionFile):
             if row[0] == "station1":
-                print("skipping label line in connection file")
+#                print("skipping label line in connection file")
                 continue
             #The first station in the connection
             station1ID = row[0]
