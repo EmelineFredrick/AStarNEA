@@ -1,38 +1,25 @@
-Module: TubeAStar.py
-
-#NEXT STEP: TODO GRAPH <-----------
-
+#Module: TubeAStar.py
+import StationGraph
 
 # graph format
 # key = station identifier
 # value = array of data
-# value[0] = coordinates of station, latitude & longitude
-# value[n] = neighbor key value
+#{"ID" : ["Station Name", [latitude, longitude], [neighbour ID, connection line, time to neighbour]]}
 
-testGraph = {'a': [[1,1],'b', 'c'],
-             'b': [[3,1],'a'],
-             'c': [[2,2],'d',],
-             'd': [[4,5],'c', 'e'],
-             'e': [[1,3],'b', 'd']}
+Example = {"13": ["Bank", [51.5133,-0.0886], [156, 2, 2], [250, 2, 2], [225, 13, 2], [157, 9, 2], [167, 9, 3], [279, 12, 4]],
+           "156":["Liverpool Street", [51.5178,-0.0823], [13, 2, 2], [24, 2, 3], [14, 3], [2, 8, 2], [167, 6, 2]],
+           "250":["St.Paul's", [51.5146,-0.0973], [13, 2, 2], [48, 2, 2]],
+           "225":["Shadwell", [51.5117,-0.056], [13, 13, 2], [155, 13, 2], [262, 13, 2], [276, 5, 1], [295, 5, 2]],
+           "157":["London Bridge", [51.5052,-0.0864], [23, 7, 3], [233, 7, 2], [13, 9, 2], [29, 9, 2]],
+           "167":["Moorgate", [51.5186,-0.0886], [14, 3, 2], [156, 3, 2], [13, 9, 3], [188, 9, 1]],
+           "188":["Old Street", [51.5263,-0.0873], [7, 9, 3], [167, 9, 1]],
+           "7"  :["Angel", [51.5322,-0.1058], [188, 9, 3]]}
 
-# TODO (graph):
-# decide new graph format (including actual times)
-# adjust testGraph to new format 
-# build graph from london.connections.csv
-# implement Dist using new graph
+def getGraph():
+    return StationGraph.getGraph()
 
-# TODO (HCost):
-# reimplement HCost using haversine formula
-# https://www.movable-type.co.uk/scripts/latlong.html
-
-# from london.stations.csv
-# min latitude: 51.4022
-# max latitude: 51.7052
-# min longitude:-0.0021
-# max longitude: 0.251
-
-#Next step is set up HCost properly
-def AStar (StartKey, EndKey, graph):
+def AStar (StartKey, EndKey):
+    graph = getGraph()
     ClosedSet = set()
     OpenSet = set(StartKey)
 
@@ -60,7 +47,7 @@ def AStar (StartKey, EndKey, graph):
                 continue
             if Neighbour not in OpenSet:
                 OpenSet.add(Neighbour)
-            PossGScore = gScore.get(Current) + Dist(Current, Neighbour)
+            PossGScore = gScore.get(Current) + Dist(Current, Neighbour, graph)
             if Neighbour in gScore:
                 if PossGScore >= gScore.get(Neighbour):
                     continue
@@ -92,13 +79,34 @@ def Recon (CameFrom, Current):
         TotalPath.append(Current)
     return TotalPath
 
-def Dist (Current, Neighbour):
-#The actual distance eg. time
-    return 10
+#The actual distance eg. time    
+def Dist (Current, Neighbour, graph):
+    currentNode = graph.get(Current)
+    for x in currentNode[2::]:
+        if str(x[0]) == Neighbour:
+            return x[2]
+    print("problem! could not find neighbour in current node: " + currentNode[0] + ", " + Neighbour)
         
 def HCost (From, To):
-#heuristic score (in minutes) is not the actual cost
-    return 1
+     #X is longitude
+    x1 = From[1][1]
+    x2 = To[1][1]
+
+   #Y is latitude
+    y1 = From[1][0]
+    y2 = To[1][0]
+
+    #deltaX is equal to the metres difference along the E/W axis between current and end
+    deltaX = (x2-x1)*111320*math.cos(math.radians(y2))
+    #deltaY is equal to the metres difference along the N/S axis
+    deltaY = (y2-y1)*110574
+
+    Distance = (deltaX**2 + deltaY**2)**0.5
+
+    # max tube speed in meters per minute (Met line : 65 mph)
+    Velocity = 1743.456
+    Time = Distance / Velocity
+    return Time
 
 def FindCurrent (OpenSet, fScore):
     working = OpenSet.copy()
@@ -107,11 +115,10 @@ def FindCurrent (OpenSet, fScore):
         nextCandidate = working.pop()
         if fScore[nextCandidate] < fScore[current]:
             current = nextCandidate
-    return current            
+    return current
+
     
-#TheSet = set(["a", "b", "c", "d"])
-#TheScores = {"a": 5, "b": 4, "c": 2, "d": 6}
-#print(FindCurrent(TheSet, TheScores))
+    
 
 
 
