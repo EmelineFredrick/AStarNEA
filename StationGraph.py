@@ -23,7 +23,14 @@ class Station:
             entry.append(neighbour)
         return entry
 
+global GRAPH
+GRAPH = {}
+
 def getGraph():
+    global GRAPH
+    if len(GRAPH) > 0:
+        return GRAPH
+    
     #This is the dictonary of all the stations
     stations = {}
     with open("london.stations.csv", "r") as StationFile:
@@ -57,4 +64,16 @@ def getGraph():
         currentStation = stations[stationKey]
         graph[currentStation.GetID()] = currentStation.GetArrayForGraph()
 
+    
+    GRAPH = graph
+
     return graph
+
+def getNameToId():
+    nameToId = {}
+    graph = getGraph()
+    for ID in graph:
+        value = graph.get(ID)
+        name = value[0]
+        nameToId[name] = ID
+    return nameToId

@@ -1,5 +1,6 @@
 import unittest
 import TubeAStar
+import StationGraph
 import csv
 
 class TestHCost(unittest.TestCase):
@@ -43,7 +44,16 @@ class TestHCost(unittest.TestCase):
     #test for longer case (Clapham South to Paddington)
     def testClaphamSouthToPaddington(self):
         result = TubeAStar.AStar("56", "193")
-        print(result)
+        #print(result)
+        graph = TubeAStar.getGraph()
+        for station in result:
+            stationData = graph.get(station)
+            #print(stationData[0])
+
+    def testForMap(self):
+        nameToId = StationGraph.getNameToId()
+        self.assertEqual(nameToId.get("Bank"), "13")
+        
 
 if __name__ == '__main__':
     unittest.main()
