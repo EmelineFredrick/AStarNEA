@@ -58,7 +58,19 @@ class TestHCost(unittest.TestCase):
     def testForCalculatingTime(self):
         result = TubeAStar.AStar("13", "7")
         totalTime = StationGraph.calculateTime(result)
+##        print(stationData[0]+", "+station)
         self.assertEqual(totalTime, 7)
+
+    def testNameToId(self):
+        nameToId = StationGraph.getNameToId()
+        self.assertEqual(nameToId["Bank"], "13")
+
+    def testSeperateNameToId(self):
+        names = StationGraph.getNameOnly()
+        uniform = ""
+        for x in names:
+            uniform += x+"\n"
+        print(uniform)
         
         
 

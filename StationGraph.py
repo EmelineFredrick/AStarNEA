@@ -90,3 +90,12 @@ def calculateTime(resultArray):
             if x[0] == store[index-1]:
                 totalTime += x[2]
     return totalTime
+
+def getNameOnly():
+    global GRAPH
+    nameList = []
+    for entries in GRAPH:
+        temp = GRAPH.get(entries)
+        nameList.append(temp[0])
+    nameList = sorted(nameList)
+    return(nameList)
